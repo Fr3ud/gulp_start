@@ -4,6 +4,8 @@ const watch = require('gulp-watch');
 const sass = require('gulp-sass');
 const autoprefixer = require('gulp-autoprefixer');
 const sourcemaps = require('gulp-sourcemaps');
+const plumber = require('gulp-plumber');
+const notify = require('gulp-notify');
 
 gulp.task('hello', function(callback) {
     console.log('Hello World!');
@@ -12,6 +14,15 @@ gulp.task('hello', function(callback) {
 
 gulp.task('scss', function(callback) {
     return gulp.src('./app/scss/main.scss')
+        .pipe(plumber({
+            errorHandler: notify.onError(function(err) {
+                return {
+                    title: 'Styles',
+                    sound: false,
+                    message: err.message
+                }
+            })
+        }))
         .pipe(sourcemaps.init())
         .pipe(sass())
         .pipe(autoprefixer({
@@ -32,7 +43,8 @@ gulp.task('server', function() {
 });
 
 gulp.task('watch', function() {
-    watch(['./app/*.html', '.app/css/**/*.css'], gulp.parallel(browserSync.reload));
+    watch('./app/*.html', gulp.parallel(browserSync.reload));
+    watch('./app/css/**/*.css', gulp.parallel(browserSync.reload));
     watch('./app/scss/**/*.scss', gulp.parallel('scss'));
 });
 
