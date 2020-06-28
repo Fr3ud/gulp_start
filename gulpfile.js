@@ -1,9 +1,18 @@
 const gulp = require('gulp');
 const browserSync = require('browser-sync').create();
 const watch = require('gulp-watch');
+const sass = require('gulp-sass');
 
 gulp.task('hello', function(callback) {
     console.log('Hello World!');
+    callback();
+});
+
+gulp.task('scss', function(callback) {
+    return gulp.src('./app/scss/main.scss')
+        .pipe(sass())
+        .pipe(gulp.dest('./app/css/'));
+
     callback();
 });
 
