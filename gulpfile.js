@@ -3,6 +3,7 @@ const browserSync = require('browser-sync').create();
 const watch = require('gulp-watch');
 const sass = require('gulp-sass');
 const autoprefixer = require('gulp-autoprefixer');
+const sourcemaps = require('gulp-sourcemaps');
 
 gulp.task('hello', function(callback) {
     console.log('Hello World!');
@@ -11,10 +12,12 @@ gulp.task('hello', function(callback) {
 
 gulp.task('scss', function(callback) {
     return gulp.src('./app/scss/main.scss')
+        .pipe(sourcemaps.init())
         .pipe(sass())
         .pipe(autoprefixer({
             overrideBrowserslist: ['last 4 versions']
         }))
+        .pipe(sourcemaps.write())
         .pipe(gulp.dest('./app/css/'));
 
     callback();
