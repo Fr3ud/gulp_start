@@ -6,9 +6,27 @@ const autoprefixer = require('gulp-autoprefixer');
 const sourcemaps = require('gulp-sourcemaps');
 const plumber = require('gulp-plumber');
 const notify = require('gulp-notify');
+const fileinclude = require('gulp-file-include');
 
 gulp.task('hello', function(callback) {
     console.log('Hello World!');
+    callback();
+});
+
+gulp.task('html', function(callback) {
+    return gulp.src('./app/html/*.html')
+        .pipe(plumber({
+            errorHandler: notify.onError(function(err) {
+                return {
+                    title: 'HTML',
+                    sound: false,
+                    message: err.message
+                }
+            })
+        }))
+        .pipe(fileinclude({ prefix: '@@' }))
+        .pipe(gulp.dest('./app/'));
+
     callback();
 });
 
