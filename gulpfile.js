@@ -61,9 +61,10 @@ gulp.task('server', function() {
 });
 
 gulp.task('watch', function() {
+    watch('./app/html/**/*.html', gulp.parallel('html'));
+    watch('./app/scss/**/*.scss', gulp.parallel('scss'));
     watch('./app/*.html', gulp.parallel(browserSync.reload));
     watch('./app/css/**/*.css', gulp.parallel(browserSync.reload));
-    watch('./app/scss/**/*.scss', gulp.parallel('scss'));
 });
 
-gulp.task('start', gulp.parallel('scss', 'server', 'watch'));
+gulp.task('start', gulp.parallel('html', 'scss', 'server', 'watch'));
