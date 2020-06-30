@@ -8,9 +8,10 @@ const plumber = require('gulp-plumber');
 const notify = require('gulp-notify');
 const pug = require('gulp-pug');
 
-gulp.task('hello', function(callback) {
-    console.log('Hello World!');
-    callback();
+gulp.task('mantra', function() {
+    while('ego') {
+        console.log('om mani padme hum');
+    }
 });
 
 gulp.task('pug', function() {
