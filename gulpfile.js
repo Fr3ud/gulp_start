@@ -6,31 +6,32 @@ const autoprefixer = require('gulp-autoprefixer');
 const sourcemaps = require('gulp-sourcemaps');
 const plumber = require('gulp-plumber');
 const notify = require('gulp-notify');
-const fileinclude = require('gulp-file-include');
+const pug = require('gulp-pug');
 
 gulp.task('hello', function(callback) {
     console.log('Hello World!');
     callback();
 });
 
-gulp.task('html', function(callback) {
-    return gulp.src('./app/html/*.html')
+gulp.task('pug', function() {
+    return gulp.src('./app/pug/pages/**/*.pug')
         .pipe(plumber({
             errorHandler: notify.onError(function(err) {
                 return {
-                    title: 'HTML',
+                    title: 'Pug',
                     sound: false,
                     message: err.message
                 }
             })
         }))
-        .pipe(fileinclude({ prefix: '@@' }))
+        .pipe(pug({
+            doctype: 'html',
+            pretty: true
+        }))
         .pipe(gulp.dest('./app/'));
-
-    callback();
 });
 
-gulp.task('scss', function(callback) {
+gulp.task('scss', function() {
     return gulp.src('./app/scss/main.scss')
         .pipe(plumber({
             errorHandler: notify.onError(function(err) {
@@ -48,8 +49,6 @@ gulp.task('scss', function(callback) {
         }))
         .pipe(sourcemaps.write())
         .pipe(gulp.dest('./app/css/'));
-
-    callback();
 });
 
 gulp.task('server', function() {
@@ -61,10 +60,10 @@ gulp.task('server', function() {
 });
 
 gulp.task('watch', function() {
-    watch('./app/html/**/*.html', gulp.parallel('html'));
+    watch('./app/pug/**/*.pug', gulp.parallel('pug'));
     watch('./app/scss/**/*.scss', gulp.parallel('scss'));
     watch('./app/*.html', gulp.parallel(browserSync.reload));
     watch('./app/css/**/*.css', gulp.parallel(browserSync.reload));
 });
 
-gulp.task('start', gulp.parallel('html', 'scss', 'server', 'watch'));
+gulp.task('start', gulp.parallel('pug', 'scss', 'server', 'watch'));
